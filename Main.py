@@ -3,7 +3,8 @@ import numpy as np
 
 
 def read_file(filename, tbond=False):
-    data = pd.read_csv(filename, sep=',', usecols=[0, 6], names=['Date', 'Price'], header=0)
+    # Will use the column on index 5 - AdjClose - the Adjusted Closing Price.
+    data = pd.read_csv(filename, sep=',', usecols=[0, 5], names=['Date', 'Price'], header=0)
     if not tbond:
         returns = np.array(data["Price"][:-1], np.float) / np.array(data["Price"][1:], np.float) - 1
         data["Returns"] = np.append(returns, np.nan)
@@ -40,3 +41,4 @@ linear_regressor.fit((nasdaqData - tbondData).values.reshape(-1, 1), (googleData
 
 # Testing Phase
 print("The Beta for Google computed with Ordinary least squares Linear Regression is " + str(linear_regressor.coef_[0]))
+print("While Reuters declares a Beta for GOOG of 0.91 and Yahoo Finance a Beta(3Y Monthly) of 1.3")
